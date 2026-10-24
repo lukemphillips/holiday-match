@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Holiday Match | Find Your Family Holiday</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f5f7f4;color:#20352f}
+header{padding:22px 18px;background:#174c40;color:white}
+.logo{font-size:24px;font-weight:800}
+header p{margin:5px 0 0;color:#d8eee5}
+main{max-width:650px;margin:auto;padding:20px 15px}
+.hero{padding:24px 5px}
+h1{font-size:34px;line-height:1.15;margin:8px 0 12px}
+.sub{color:#586b63;line-height:1.6}
+.card{background:white;border-radius:18px;padding:20px;margin:16px 0;box-shadow:0 3px 18px #173c3010}
+.tag{color:#277760;font-size:12px;font-weight:800;letter-spacing:1px}
+#chat{min-height:180px}
+.msg{padding:13px 15px;border-radius:15px;margin:12px 0;line-height:1.5;white-space:pre-line}
+.bot{background:#edf4ef;margin-right:15px}
+.user{background:#174c40;color:white;margin-left:35px}
+.options{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+button{border:1px solid #c9d9d0;border-radius:22px;padding:11px 14px;background:white;color:#174c40;font-size:14px;cursor:pointer}
+button:hover{background:#e6f2eb}
+.primary{background:#174c40;color:white;border:0;font-weight:700}
+input{width:100%;padding:14px;border:1px solid #c9d9d0;border-radius:12px;font-size:16px}
+.row{display:flex;gap:8px;margin-top:10px}
+.row input{min-width:0}
+.row button{border-radius:12px}
+.result{border-top:1px solid #e0e8e2;padding:15px 0}
+.result h3{margin:5px 0}
+.badge{display:inline-block;background:#e5f3eb;padding:5px 9px;border-radius:10px;font-size:12px}
+.small{font-size:13px;color:#64736c;line-height:1.5}
+footer{text-align:center;padding:25px;color:#66776f;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">🌍 Holiday Match</div>
+<p>Your family's next adventure starts here.</p>
+</header>
+<main>
+<section class="hero">
+<div class="tag">YOUR PERSONAL HOLIDAY ADVISER</div>
+<h1>Let's find your kind of holiday.</h1>
+<p class="sub">Beach escapes, campsites, ski adventures and winter sunshine. Tell us what matters to your family and discover holidays worth exploring.</p>
+</section>
+<section class="card">
+<div class="tag">YOUR HOLIDAY CHAT</div>
+<div id="chat" aria-live="polite"></div>
+<div id="options" class="options"></div>
+<div class="row">
+<input id="answer" placeholder="Or type your own answer..." aria-label="Your answer">
+<button class="primary" onclick="sendText()">Send</button>
+</div>
+<p class="small">Your answers help us tailor suggestions to your family.</p>
+</section>
+<section class="card" id="results" hidden>
+<div class="tag">YOUR HOLIDAY SHORTLIST</div>
+<h2>Ideas for your family</h2>
+<p class="small">These are initial suggestions, not live offers or verified prices.</p>
+<div id="matches"></div>
+<button onclick="restart()">Start again</button>
+</section>
+</main>
+<footer>Holiday Match · Family holidays, made easier</footer>
+<script>
+const questions=[
+{key:"origin",q:"First, where will you be travelling from?",opts:["Ireland","United Kingdom","Flexible"]},
+{key:"month",q:"When would you like to travel?",opts:["February","March–April","May–June","July–August","September–October","November–December","Flexible dates"]},
+{key:"family",q:"Who is coming along?",opts:["2 adults, children aged 0–5","2 adults, children aged 6–12","2 adults, teenagers","One adult with children","A mix of ages","Adults only"]},
+{key:"budget",q:"What's your approximate total budget, including travel and accommodation?",opts:["Under €1,500","€1,500–€2,500","€2,500–€4,000","€4,000+","Flexible"]},
+{key:"style",q:"What kind of trip sounds best? Choose one or more.",opts:["Beach and swimming","Campsite or mobile home","Villa or apartment","Family resort","Skiing and snow","Christmas markets","Northern lights","Winter sunshine","Nature and adventure","City break"],multi:true},
+{key:"priority",q:"What's most important to your family?",opts:["Keeping costs down","Warm and sunny weather","Pools and activities for children","Easy travel","Snow and winter experiences","A mix of everything"]}
+];
+let step=0,answers={},selected=[];
+const chat=document.getElementById("chat"),options=document.getElementById("options"),input=document.getElementById("answer");
+function say(text,who="bot"){let d=document.createElement("div");d.className="msg "+who;d.textContent=text;chat.appendChild(d);chat.scrollTop=chat.scrollHeight}
+function ask(){if(step>=questions.length){showResults();return}let q=questions[step];say(q.q);options.innerHTML="";selected=[];q.opts.forEach(o=>{let b=document.createElement("button");b.textContent=o;b.onclick=()=>choose(o,b,q);options.appendChild(b)});if(q.multi){let b=document.createElement("button");b.textContent="Done ✓";b.className="primary";b.onclick=()=>{if(selected.length)submit(selected.join(", "))};options.appendChild(b)}}
+function choose(o,b,q){if(q.multi){if(selected.includes(o)){selected=selected.filter(x=>x!==o);b.style.background="white"}else{selected.push(o);b.style.background="#cde9d8"}}else submit(o)}
+function submit(v){answers[questions[step].key]=v;say(v,"user");step++;options.innerHTML="";input.value="";setTimeout(ask,250)}
+function sendText(){let v=input.value.trim();if(!v)return;submit(v)}
+input.addEventListener("keydown",e=>{if(e.key==="Enter")sendText()});
+function showResults(){
+options.innerHTML="";input.disabled=true;
+say("Thanks! I'm matching your preferences with some destinations to explore.");
+let style=(answers.style||"").toLowerCase(),month=(answers.month||"").toLowerCase(),budget=answers.budget||"";
+let winter=/february|november|december/.test(month),ski=/ski|snow/.test(style),sun=/sunshine|beach|swimming/.test(style),camp=/camp|mobile/.test(style);
+let pool=[
+{name:"Algarve, Portugal",type:"Beach · Resorts · Apartments",why:"A flexible choice for beaches, pools and a range of family accommodation.",season:"Often best for beach weather from late spring to early autumn.",cost:"Budget depends on flights, dates and accommodation."},
+{name:"Lake Garda, Italy",type:"Lakeside · Campsites · Theme parks",why:"A mix of swimming, outdoor activities, lakeside towns and family attractions.",season:"Popular from late spring through summer; check seasonal opening dates.",cost:"Compare campsite, apartment and hotel options."},
+{name:"Costa Brava, Spain",type:"Beach · Campsites · Water parks",why:"A wide choice of beaches and family holiday parks.",season:"Most beach facilities operate in the warmer months.",cost:"Prices vary by resort and school holiday dates."},
+{name:"Dordogne, France",type:"Countryside · Campsites · Canoeing",why:"Great for families who enjoy nature, rivers and relaxed outdoor holidays.",season:"Best suited to late spring and summer outdoor trips.",cost:"Self-catering and camping may help manage spending."},
+{name:"Austrian Alps",type:"Skiing · Ski schools · Mountain villages",why:"Worth exploring for family ski trips, beginner lessons and snowy mountain scenery.",season:"Ski conditions vary by resort and winter; check snow reports.",cost:"Allow for lift passes, lessons, equipment hire and transfers."},
+{name:"French Alps",type:"Skiing · Resorts · Snow activities",why:"A broad range of ski resorts, including options for families and beginners.",season:"Compare altitude, resort opening dates and snow reliability.",cost:"School holiday dates can increase total costs."},
+{name:"Lapland, Finland",type:"Snow · Reindeer · Arctic experiences",why:"A special winter adventure with snow activities and a chance to see the northern lights.",season:"Winter activities are seasonal; daylight and snow conditions vary.",cost:"Packages and activities can make this a higher-cost trip."},
+{name:"Vienna, Austria",type:"Christmas markets · City break",why:"A festive city break with markets, museums and family attractions.",season:"Check Christmas market dates before booking.",cost:"Compare flights, central accommodation and attraction costs."},
+{name:"Madeira, Portugal",type:"Winter sunshine · Nature · Pools",why:"A milder-weather option for families who enjoy scenery, walks and outdoor exploring.",season:"Generally mild, but weather can change and swimming conditions vary.",cost:"Prices depend on flights and where you stay."},
+{name:"Crete, Greece",type:"Beach · Resorts · Family activities",why:"A strong warm-weather option with beaches and family-friendly accommodation.",season:"The main beach season is warmer months; check late-season facilities.",cost:"Compare resort packages with apartments and self-catering."}
+];
+let filtered=pool.filter(p=>{
+let n=p.name.toLowerCase(),t=p.type.toLowerCase();
+if(ski)return n.includes("alps");
+if(/christmas markets/.test(style))return n.includes("vienna");
+if(/northern lights/.test(style))return n.includes("lapland");
+if(/winter sunshine/.test(style)&&winter)return n.includes("madeira");
+if(camp)return t.includes("campsite")||n.includes("dordogne");
+if(sun&&winter)return n.includes("madeira")||n.includes("algarve")||n.includes("crete");
+if(sun)return n.includes("algarve")||n.includes("garda")||n.includes("costa brava")||n.includes("crete");
+if(winter)return n.includes("lapland")||n.includes("vienna")||n.includes("madeira")||n.includes("alps");
+return true
+});
+if(!filtered.length)filtered=pool.slice(0,3);
+let out=document.getElementById("matches");out.innerHTML="";
+filtered.slice(0,3).forEach((p,i)=>{let d=document.createElement("div");d.className="result";d.innerHTML='<span class="badge">MATCH '+(i+1)+'</span><h3>'+p.name+'</h3><p class="small">'+p.type+'</p><p>'+p.why+'</p><p class="small"><b>Season:</b> '+p.season+'<br><b>Budget:</b> '+p.cost+'</p>';out.appendChild(d)});
+document.getElementById("results").hidden=false;
+say("I've put together a starting shortlist below. You can restart to explore another kind of holiday. These are general suggestions; I haven't checked live prices or availability.");
+}
+function restart(){step=0;answers={};selected=[];chat.innerHTML="";document.getElementById("results").hidden=true;input.disabled=false;say("Hi! 👋 I'm your Holiday Match adviser. I'll ask a few quick questions and suggest family holidays to explore.");ask();window.scrollTo(0,0)}
+restart();
+</script>
+</body>
+</html>

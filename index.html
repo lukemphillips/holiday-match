@@ -82,9 +82,9 @@ footer{line-height:1.8}
 <div class="results" id="results"><div class="results-intro"><div class="eyebrow">✦ Your shortlist</div><h2 id="result-title">Your best-fit destinations</h2><p id="result-summary"></p></div><div class="cards" id="cards"></div><div class="results-bottom"><span class="fine">Budgets are broad planning estimates, not quotes. Check current travel and accommodation prices before booking.</span><button class="btn secondary" onclick="restart()">↻ Start again</button></div></div></div>
 </section>
 <section class="quick-start" aria-labelledby="quick-start-title"><div class="section-head"><div><h2 id="quick-start-title">What kind of break are you planning?</h2><p>Choose a starting point, or go straight to the finder for a personalised shortlist.</p></div></div><div class="quick-start-grid">
-<button type="button" class="quick-start-card" onclick="startWithSeason('July–August','Beach & pool')"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Mediterranean-style sandy beach and blue sea" loading="lazy"><span><strong>Summer beach holidays</strong><small>Resorts, pools & mobile homes</small></span></button>
+<button type="button" class="quick-start-card" onclick="startWithSeason('July–August','Beach & pool')"><img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=600&q=80" alt="Mediterranean-style sandy beach and blue sea" loading="lazy"><span><strong>Summer beach holidays</strong><small>Resorts, pools & mobile homes</small></span></button>
 <button type="button" class="quick-start-card" onclick="startWithSeason('March–April','Activities & adventure')"><img src="https://images.unsplash.com/photo-1555881400-74d7acaacea8?auto=format&fit=crop&w=600&q=80" alt="Historic streets in Lisbon, Portugal" loading="lazy"><span><strong>Easter & half-term</strong><small>City breaks & outdoor escapes</small></span></button>
-<button type="button" class="quick-start-card" onclick="startWithSeason('November–February','Seasonal magic')"><img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?auto=format&fit=crop&w=600&q=80" alt="European Christmas market decorations" loading="lazy"><span><strong>Winter escapes</strong><small>Skiing, markets & winter sun</small></span></button>
+<button type="button" class="quick-start-card" onclick="startWithSeason('November–February','Seasonal magic')"><img src="https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=600&q=80" alt="European Christmas market decorations" loading="lazy"><span><strong>Winter escapes</strong><small>Skiing, markets & winter sun</small></span></button>
 </div></section>
 
 
@@ -141,13 +141,13 @@ function score(d){let s=0,notes=[];if(d.months.includes(answers.month)){s+=4;not
 function matchReason(d){const reasons=[];if(d.months.includes(answers.month))reasons.push('the season fits your travel month');if(d.styles.includes(answers.style))reasons.push('it matches your preferred holiday style');if(d.ages.includes(answers.family))reasons.push('it has options suited to your children’s age group');if(d.priority.includes(answers.priority))reasons.push('it supports your main priority');const note=extraNotes.toLowerCase();if(note&&(/no car|without a car|public transport|train/.test(note))&&['vienna','lisbon','barcelona','rome','paris','copenhagen','malta'].includes(d.id))reasons.push('it is relatively practical without a hire car');if(note&&(/quiet|peaceful|less busy|relaxed/.test(note))&&['menorca','dordogne','madeira','slovenia'].includes(d.id))reasons.push('it may offer the calmer pace you asked for');return reasons.length?'We picked this because '+reasons.slice(0,3).join(', ')+'.':'This is an alternative worth comparing against your preferences.'}
 function budgetRange(d){let bi=['Under €1,500','€1,500–€3,000','€3,000–€5,000','€5,000+'].indexOf(answers.budget);let di=['2–4 nights','5–7 nights','8–14 nights','More than 2 weeks'].indexOf(answers.duration);let base=d.cost[bi];let factor=[.55,1,1.55,2.25][di];let low=Math.round(base*factor*.8/50)*50,high=Math.round(base*factor*1.2/50)*50;return '€'+low.toLocaleString('en-IE')+'–€'+high.toLocaleString('en-IE')}
 const destinationImages={
-"algarve":"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=85",
+"algarve":"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=85",
 "garda":"https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1200&q=85",
 "lapland":"https://images.unsplash.com/photo-1517299321609-52687d1bc55a?auto=format&fit=crop&w=1200&q=85",
 "dordogne":"https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=85",
-"costabrava":"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=85",
-"austrian-alps":"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85",
-"french-alps":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=85",
+"costabrava":"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=85",
+"austrian-alps":"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=85",
+"french-alps":"https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85",
 "vienna":"https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=1200&q=85",
 "madeira":"https://images.unsplash.com/photo-1628413283166-a7666966d26b?auto=format&fit=crop&w=1200&q=85",
 "crete":"https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=85",
@@ -155,8 +155,19 @@ const destinationImages={
 "puglia":"https://www.newmarketholidays.co.uk/media/qhcouka4/sh_2472864845-traditional-trulli-houses-alberobello-puglia-southern-italy.jpg?format=webp&v=1dd02fb00cf85f0",
 "sardinia":"https://hybridparadise.com/assets/gallery_sardinia_beach-CfmdOB8r.png",
 "lisbon":"https://images.unsplash.com/photo-1555881400-74d7acaacea8?auto=format&fit=crop&w=1200&q=85",
-"dutch-parks":"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85",
-"disneyland-paris":"https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=85"
+"dutch-parks":"https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=1200&q=85",
+"disneyland-paris":"https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=85",
+"mallorca":"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=85",
+"menorca":"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=85",
+"cyprus":"https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=85",
+"malta":"https://images.unsplash.com/photo-1555881400-74d7acaacea8?auto=format&fit=crop&w=1200&q=85",
+"costa-del-sol":"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=85",
+"barcelona":"https://images.unsplash.com/photo-1583422409516-2895a77efded?auto=format&fit=crop&w=1200&q=85",
+"rome":"https://images.unsplash.com/photo-1525874684015-58379d421a52?auto=format&fit=crop&w=1200&q=85",
+"slovenia":"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85",
+"croatia":"https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=85",
+"copenhagen":"https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=1200&q=85",
+"paris":"https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=85"
 };
 const stayIdeas={
 "algarve":[["Family resorts & aparthotels","Algarve family resorts with pools"],["Campsites & mobile homes","Algarve family campsites mobile homes"],["Apartments & villas","Algarve family apartments villas"]],

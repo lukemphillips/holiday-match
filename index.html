@@ -108,6 +108,37 @@ footer{line-height:1.8}
  .trust-strip{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:24px}
  .trust-item{padding:12px}.trust-item+.trust-item{border-left:0}.trust-item:nth-child(even){border-left:1px solid var(--line)}.trust-item:nth-child(n+3){border-top:1px solid var(--line)}
 }
+
+/* Final mobile hero layout override: keep the photo and copy in separate rows */
+@media (max-width:700px){
+  main.wrap{overflow:visible}
+  section.hero{
+    display:flex!important;flex-direction:column!important;position:relative!important;
+    min-height:0!important;height:auto!important;overflow:hidden!important;
+    margin:0 -22px 26px!important;padding:0!important;gap:0!important;
+    border-radius:0 0 18px 18px!important;background:#f8fbfc!important;
+  }
+  section.hero .hero-art{
+    display:block!important;position:relative!important;inset:auto!important;
+    order:0!important;flex:none!important;width:100%!important;height:250px!important;
+    min-height:250px!important;max-height:250px!important;border-radius:0!important;
+    overflow:hidden!important;background:#d8eaf0!important;
+  }
+  section.hero .hero-main-photo{
+    display:block!important;position:absolute!important;inset:0!important;
+    width:100%!important;height:100%!important;min-height:0!important;
+    object-fit:cover!important;object-position:center 48%!important;border-radius:0!important;
+    opacity:1!important;visibility:visible!important;
+  }
+  section.hero>div:first-child{
+    display:flex!important;position:relative!important;inset:auto!important;order:1!important;
+    width:100%!important;min-height:0!important;padding:24px 22px 28px!important;
+    background:#f8fbfc!important;justify-content:flex-start!important;
+  }
+  section.hero .hero-image-caption{display:none!important}
+  section.hero h1{font-size:2.55rem!important;line-height:1.02!important}
+}
+
 </style>
 </head>
 <body>
